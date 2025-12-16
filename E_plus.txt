@@ -1,0 +1,3 @@
+pos(t0_1, [at(d1, p2), at(d2, p1), at(d3, p1), clear(p2), on_top(d2, p1), on_top(d1, p2)], [move(p1,p 3)]).
+pos(t0_0, [at(d1, p1), at(d2, p1), at(d3, p1), clear(p1), on_top(d1, p1)], [move(p1,p 2)]).
+pos(t0_2, [at(d1, p2), at(d2, p3), at(d3, p1), clear(p2), on_top(d3, p1), on_top(d1, p2), on_top(d2, p3)], [move(p2,p 3)]).

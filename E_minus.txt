@@ -1,0 +1,1 @@
+neg(c0, [at(d1, p2), at(d2, p2), at(d3, p1), clear(p2), on_top(d3, p1), on_top(d1, p2)], [move(p1,p 3)]).
