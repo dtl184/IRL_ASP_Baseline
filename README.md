@@ -23,16 +23,15 @@ $$c^* = \arg\max_{(s,a) \notin \tau_{\text{exp}}} D_{sa}(s, a)$$
 where $\tau_\text{exp}$ is an observed expert trajectory. 
 
 ### 3. Symbolic Induction
-Once a candidate $c^*$ is identified, we  We use **ILASP** to find a hypothesis $H$ that explains why the candidate is a violation while the expert's moves are not:
+Once a candidate $c^*$ is identified, we  We use **ILASP** to find a hypothesis $H$ that explains why the candidate is a violation while the expert's moves are not. ILASP uses the language bias that sets the structure of the constraint. The head of the generated rule is `violation` and the body predicates `moving_disk(X)`, `disk_below(X)`, and `smaller(X, Y)`. ILASP generates constraints $H$ that, with background knowledge $B$, satisfies the following:
 
 $$B \cup H \models E^+ \quad \text{and} \quad B \cup H \not\models E^-$$
 
-
+In other words, the constraints must be true for all positive violation examples and false for all negative violation examples. ILASP may generate multiple rules, it selects the simplest rule out all candidates (the rule with the fewest number of literals in the body). 
 
 ### 4. Results
-Through this iterative process, the framework successfully induces the physical law of the Tower of Hanoi:
+We generated 26 trajectories of solving Towers of Hanoi with three disks and three pegs. The three disks are labeled 1, 2, and 3. Disk 1 is smaller than disk 2 which is smaller than disk 3. After a single iteration of IRL and ILASP, the following constraint was discovered:
 
-**Learned Rule:**
 `violation :- moving_disk(V1), disk_below(V2), smaller(V2, V1).`
 
-This rule generalizes across all 162 possible transitions, effectively "pruning" the MDP to match the physical constraints of the real world.
+
