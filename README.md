@@ -18,7 +18,7 @@ $$\pi(a\mid s) = \frac{\exp(Q(s,a))}{\Sigma_{a} \exp(Q(s,a))}$$
 
 The algorithm then identifies candidate violation state-action pair, where the unconstrained agent's visitation frequency is high, but the expert's is zero. A candidate violation $c^*$ is selected as:
 
-$$c^* = \arg\max_{(s,a) \notin \mathcal{\tau}_{\text{exp}} D_{sa}(s, a)$$
+$$c^* = \arg\max_{(s,a) \notin \tau_{\text{exp}}} D_{sa}(s, a)$$
 
 ### 3. Symbolic Induction
 Once a candidate $c^*$ is identified, we  We use **ILASP** to find a hypothesis $H$ that explains why the candidate is a violation while the expert's moves are not:
