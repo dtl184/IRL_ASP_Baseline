@@ -17,7 +17,7 @@ The algorithm then identifies a candidate violation state-action pair, where the
 
 $$c^* = \arg\max_{(s,a) \notin T} D_{sa}(s, a)$$
 
-where $\T$ is the set of expert trajectories. 
+where $T$ is the set of expert trajectories. 
 
 ### 3. Symbolic Induction
 Once a candidate $c^*$ is identified, we  We use **ILASP** to find a hypothesis $H$ that explains why the candidate is a violation while the expert's moves are not. ILASP uses the language bias which sets the structure of the generated constraints. The head of a generated constraint is `violation` and the body predicates `moving_disk(X)`, `disk_below(X)`, and `smaller(X, Y)`. ILASP generates constraints $H$ that, with background knowledge $B$, satisfy the following:
