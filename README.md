@@ -7,7 +7,7 @@ This project implements the constraint learning algorithm from "Inverse reinforc
 The environment is defined as a Markov Decision Process (MDP) without a reward function: $\mathcal{M} = (S, A, T, \gamma)$.
 
 ### 2. Maximum Entropy IRL (Numerical Discovery)
-We employ a Maximum Entropy IRL approach to estimate the **State-Action Visitation Frequency** $D_{sa}$. This value represents how often an unconstrained agent would take a specific action to reach a goal efficiently.
+We use Maximum Entropy IRL to estimate the **State-Action Visitation Frequency** $D_{sa}$. This value represents how often an unconstrained agent would take a specific action to reach a goal efficiently.
 
 $$D_{sa} = \sum_{t=0}^{H} P(s_t = s, a_t = a \mid \pi)$$
 
