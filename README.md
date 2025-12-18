@@ -11,10 +11,7 @@ We use Maximum Entropy IRL to estimate the **State-Action Visitation Frequency**
 
 $$D_{sa} = \sum_{t=0}^{H} P(s_t = s, a_t = a \mid \pi)$$
 
-Where $\pi$ is the Maximum-Entropy policy:
-
-$$\pi(a\mid s) = \frac{\exp(Q(s,a))}{\Sigma_{a} \exp(Q(s,a))}$$
-
+Where $\pi$ is the Maximum-entropy policy. $\pi$ initially sets all actions as equally likely, and removes actions whenever they are identified as candidate constraints.
 
 The algorithm then identifies a candidate violation state-action pair, where the unconstrained agent's visitation frequency is high, but the expert's is zero. A candidate violation $c^*$ is selected as:
 
