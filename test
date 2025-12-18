@@ -1,0 +1,51 @@
+import re
+import os
+
+def verify_expert_trajectories(file_path):
+    if not os.path.exists(file_path):
+        print(f"Error: {file_path} not found.")
+        return
+
+    # Load the expert trajectories
+    with open(file_path, 'r') as f:
+        local_vars = {}
+        exec(f.read(), {}, local_vars)
+        trajectories = local_vars.get('EXPERT_TRAJECTORIES', [])
+
+    print(f"Scanning {len(trajectories)} trajectories...")
+    illegal_moves_found = 0
+
+    for t_idx, traj in enumerate(trajectories):
+        for s_idx, (state, action, _) in enumerate(traj):
+            # state is (peg_disk1, peg_disk2, peg_disk3)
+            # action is 'move(p1, p2)'
+            
+            match = re.match(r'move\((\d+), (\d+)\)', action)
+            if not match: continue
+            
+            p1, p2 = int(match.group(1)), int(match.group(2))
+            
+            # Find top disks (Smallest ID is on top)
+            # Index 0=Disk1 (S), Index 1=Disk2 (M), Index 2=Disk3 (L)
+            p1_disks = [d_id for d_id, peg in enumerate(state, 1) if peg == p1]
+            p2_disks = [d_id for d_id, peg in enumerate(state, 1) if peg == p2]
+            
+            d_moving = min(p1_disks) if p1_disks else None
+            d_target = min(p2_disks) if p2_disks else None
+
+            # VIOLATION: Moving disk ID is GREATER than target disk ID
+            if d_moving is not None and d_target is not None and d_moving > d_target:
+                print(f"!!! ILLEGAL MOVE DETECTED !!!")
+                print(f"Trajectory: {t_idx}, Step: {s_idx}")
+                print(f"State: {state} | Action: {action}")
+                print(f"Logic: Moving Disk {d_moving} onto Disk {d_target}")
+                print("-" * 30)
+                illegal_moves_found += 1
+
+    if illegal_moves_found == 0:
+        print("Success: No illegal moves found in expert data.")
+    else:
+        print(f"Total illegal moves found: {illegal_moves_found}")
+
+if __name__ == "__main__":
+    verify_expert_trajectories('expert_trajectories.txt')

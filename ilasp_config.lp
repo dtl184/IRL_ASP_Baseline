@@ -1,35 +1,17 @@
-% --- Background Knowledge (B) ---
-% Facts and rules defining the environment that ILASP can use.
+% --- Background Knowledge ---
+disk(1..3).
+smaller(1, 2). smaller(1, 3). smaller(2, 3).
 
-disk(d1). disk(d2). disk(d3).
-peg(p1). peg(p2). peg(p3).
+% --- Language Bias ---
+#modeh(violation).
 
-% Disks 1 (smallest) < 2 < 3 (largest)
-smaller_than(d1, d2).
-smaller_than(d2, d3).
-smaller_than(d1, d3).
+% The agent 'sees' which disk is moving and which is below
+#modeb(1, moving_disk(var(disk)), (positive)).
+#modeb(1, disk_below(var(disk)), (positive)).
 
-% Helper definition for the inverse mapping (if needed, otherwise rely on direct facts)
-% You can add rules here, e.g., 'larger_than(D1, D2) :- smaller_than(D2, D1).'
+% The agent 'reasons' about their relative size
+#modeb(1, smaller(var(disk), var(disk)), (positive)).
 
-% --- Language Bias (M) (Search Space Definition) ---
-% This defines the structure of the learned rule (H).
-
-#modeh(1, constraint_violation(disk, peg, peg)). % The head predicate
-#modeb(1, at(disk, peg)).                     % State fact: disk is on peg
-#modeb(1, on_top(disk, peg)).                 % State fact: disk is on top of peg
-#modeb(1, smaller_than(disk, disk)).           % Background relation: size comparison
-#modeb(1, move(peg, peg)).                    % Action predicate
-
-% The expected rule H to be induced is the Tower of Hanoi constraint:
-% constraint_violation(D_move, P_from, P_to) :-
-%   at(D_larger, P_to), 
-%   smaller_than(D_move, D_larger). 
-% (i.e., you are trying to move D_move onto P_to, but D_larger is already there and is smaller than D_move).
-
-% --- Predicate Definitions for Examples ---
-#max_body(3). % Max number of predicates in the rule body
-
-% Define the structure of the hypothesis H
-#external(pos(id, state_facts, action)).
-#external(neg(id, state_facts, action)).
+% Handle the empty peg case as a constant
+#modeb(1, disk_below(const(none))).
+#constant(none, none).
