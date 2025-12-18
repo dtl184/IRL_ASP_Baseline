@@ -6,7 +6,7 @@ This project implements the constraint learning algorithm from "Inverse reinforc
 
 The environment is defined as a Markov Decision Process (MDP) without a reward function: $\mathcal{M} = (S, A, T, \gamma)$.
 
-### 2. Maximum Entropy IRL (Numerical Discovery)
+### 2. Maximum Entropy IRL
 We use Maximum Entropy IRL to estimate the **State-Action Visitation Frequency** $D_{sa}$. This value represents how often an unconstrained agent would take a specific action to reach a goal efficiently.
 
 $$D_{sa} = \sum_{t=0}^{H} P(s_t = s, a_t = a \mid \pi)$$
@@ -16,12 +16,12 @@ Where $\pi$ is the Maximum-Entropy policy:
 $$\pi(a\mid s) = \frac{\exp(Q(s,a))}{\Sigma_{a} \exp(Q(s,a))}$$
 
 
-The system identifies "informational gaps" where the unconstrained agent's visitation frequency is high, but the expert's is zero. A candidate violation $c^*$ is selected as:
+The algorithm then identifies candidate violation state-action pair, where the unconstrained agent's visitation frequency is high, but the expert's is zero. A candidate violation $c^*$ is selected as:
 
 $$c^* = \arg\max_{(s,a) \notin \mathcal{T}_{ex}} D_{sa}(s, a)$$
 
-### 3. Symbolic Induction (Logic Bridge)
-Once a candidate $c^*$ is identified, it is featurized into logical atoms. We use **ILASP** to find a hypothesis $H$ that explains why the candidate is a violation while the expert's moves are not:
+### 3. Symbolic Induction
+Once a candidate $c^*$ is identified, we  We use **ILASP** to find a hypothesis $H$ that explains why the candidate is a violation while the expert's moves are not:
 
 $$B \cup H \models E^+ \quad \text{and} \quad B \cup H \not\models E^-$$
 
