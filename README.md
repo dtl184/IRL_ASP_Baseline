@@ -34,7 +34,7 @@ We generated 26 trajectories of solving Towers of Hanoi with three disks and thr
 
 `violation :- moving_disk(V1), disk_below(V2), smaller(V2, V1).`
 
-which is precisely the underlying constraint of Towers of Hanoi.
+which is precisely the underlying constraint of Towers of Hanoi: it is a violation to move $V1$ on top of $V2$ if $V2$ is smaller than $V1$. 
 
 ## 2. Instructions for Running
 
