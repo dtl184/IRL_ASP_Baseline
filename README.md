@@ -2,7 +2,7 @@
 
 This project implements the constraint learning algorithm from "Inverse reinforcement learning through logic constraint inference" by Baert et. al. The goal is to uncover the constraint that larger disks may not be placed on top of smaller disks while completing the Towers of Hanoi task. 
 
-## 1. Methodology Overview
+## 1. Methodology
 
 The environment is defined as a Markov Decision Process (MDP) without a reward function: $\mathcal{M} = (S, A, T, \gamma)$.
 
@@ -11,19 +11,16 @@ We use Maximum Entropy IRL to estimate the **State-Action Visitation Frequency**
 
 $$D_{sa} = \sum_{t=0}^{H} P(s_t = s, a_t = a \mid \pi)$$
 
-Where $\pi$ is the Maximum-Entropy policy:
+Where $\pi$ is the maximum-entropy policy. $\pi$ initially sets all actions as equally likely, and removes actions whenever they are identified as candidate constraints.
 
-$$\pi(a\mid s) = \frac{\exp(Q(s,a))}{\Sigma_{a} \exp(Q(s,a))}$$
+The algorithm then identifies a candidate violation state-action pair, where the unconstrained agent's visitation frequency is high, but the expert's is zero. A candidate violation $c^*$ is selected as:
 
+$$c^* = \arg\max_{(s,a) \notin T} D_{sa}(s, a)$$
 
-The algorithm then identifies candidate violation state-action pair, where the unconstrained agent's visitation frequency is high, but the expert's is zero. A candidate violation $c^*$ is selected as:
-
-$$c^* = \arg\max_{(s,a) \notin \tau_{\text{exp}}} D_{sa}(s, a)$$
-
-where $\tau_\text{exp}$ is an observed expert trajectory. 
+where $T$ is the set of expert trajectories. 
 
 ### 3. Symbolic Induction
-Once a candidate $c^*$ is identified, we  We use **ILASP** to find a hypothesis $H$ that explains why the candidate is a violation while the expert's moves are not. ILASP uses the language bias which sets the structure of the generated constraints. The head of a generated constraint is `violation` and the body predicates `moving_disk(X)`, `disk_below(X)`, and `smaller(X, Y)`. ILASP generates constraints $H$ that, with background knowledge $B$, satisfy the following:
+Once a candidate $c^*$ is identified, we use **ILASP** to find a hypothesis $H$ that explains why the candidate is a violation while the expert's moves are not. ILASP uses the language bias which sets the structure of the generated constraints. The head of a generated constraint is `violation` and the body predicates `moving_disk(X)`, `disk_below(X)`, and `smaller(X, Y)`. ILASP generates constraints $H$ that, with background knowledge $B$, satisfy the following:
 
 $$B \cup H \models E^+ \quad \text{and} \quad B \cup H \not\models E^-$$
 
@@ -41,5 +38,7 @@ which is precisely the underlying constraint of Towers of Hanoi: it is a violati
 Requirements: numpy, re, clingo. Additionally you will need an ILASP implementation. There is no pip package for this but you can find an implementation here: https://github.com/ilaspltd/ILASP-releases. 
 
 To run, clone this repo and navigate to the new directory. Enter command `python main.py` to run the IRL-ILASP solver on the Towers of Hanoi trajectories and generate the smaller-disk constraint.  
+## 3. Future Work
 
+Future work on this project will entail discovering constraints in more complex environments. For example, the Proper Shopper environment https://github.com/dtl184/propershopper where agents must follow social norms in addition to completing tasks. 
 
